@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+
+  #container-page {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+
+    #container {
+      &-side-nav {
+        display: none;
+        flex-direction: column;
+        width: 0;
+
+        @media (min-width: 601px) {
+          display: flex;
+          width: 20%;
+        }
+      }
+
+      &-gallery {
+        display: flex;
+        flex-flow: row wrap;
+        margin-left: 8px;
+        width: 100%;
+
+        @media (max-width: 600px) {
+          margin-left: 0;
+        }
+
+        img {
+          flex: auto;
+          height: 240px;
+          min-width: 180px;
+          margin: 0 8px 8px 0;
+          border-radius: 10px;
+
+          @media (max-width: 600px) {
+            margin: 4px 8px;
+          }
+        }
+      }
+    }
+  }
+
+}
