@@ -1,5 +1,4 @@
 import './../scss/main.scss';
-import {Image} from "./classes/Image";
 import {PhotoService} from "./services/PhotosService";
 
 const photoService = new PhotoService();
@@ -35,6 +34,13 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 });
 
+document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault();
+        searchInput.focus();
+    }
+});
+
 const resetGallery = () => {
     return new Promise(resolve => {
         photos = [];
@@ -51,7 +57,16 @@ const populateGrid = (images) => {
             images
                 .filter(p => p.farm !== 0)
                 .forEach((img, idx) => {
-                    galleryContainer.innerHTML += new Image(img, (idx * page)).getImageTemplate();
+                    const photoUrl = `https://farm${img.farm}.staticflickr.com/${img.server}/${img.id}_${img.secret}_n.jpg`;
+                    const nextImg = new Image();
+
+                    nextImg.src = photoUrl;
+                    nextImg.id = `img-${idx}`;
+                    nextImg.onload = () => {
+                        console.log('Class: la, Function: onload, Line 63 "loaded"() => ', "loaded");
+                    };
+
+                    galleryContainer.appendChild(nextImg);
                 })
         );
     });
@@ -65,6 +80,13 @@ const completePhotoRender = () => {
             populateGrid(photos).then(() => {
                 galleryContainer.classList.remove('hidden');
                 loader.classList.add('removed');
+
+                let images = document.querySelectorAll('img');
+                images.forEach(img => {
+                    img.onload(() => {
+                        console.log('Class: a, Function: a, Line 79 "loaded"() => ', "loaded");
+                    });
+                })
             });
         });
 };

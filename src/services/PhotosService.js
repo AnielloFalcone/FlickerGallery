@@ -20,7 +20,6 @@ export class PhotoService {
                     .then((response) => {
                         response.json().then((data) => {
                             const {photos : {photo}} = data;
-                            // photo.forEach(photo => {photos.push(photo)});
 
                             window.localStorage.setItem(`photos-${query}`, JSON.stringify({
                                 photos: photo,
