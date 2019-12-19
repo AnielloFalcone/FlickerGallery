@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -7,11 +7,22 @@
 </head>
 
 <body>
+    <div id="search-bar">
+        <form>
+            <input id="search"
+                   name="search"
+                   type="text"
+                   aria-label="search"
+                   placeholder="Search photos"
+                   minlength="4"
+            />
+        </form>
+    </div>
+
     <div id="container-page">
-        <div id="container-side-nav">
-            <div class="side-nav"></div>
-        </div>
-        <div id="container-gallery"></div>
+        <div id="container-gallery" class="hidden"></div>
+
+        <div id="loader"></div>
     </div>
 </body>
 
