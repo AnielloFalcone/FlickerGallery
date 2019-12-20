@@ -5,43 +5,66 @@ export class PhotoService {
         this.FLICKR_METHOD = 'flickr.photos.search';
     }
 
+    createImage(img, idx) {
+        return new Promise(resolve => {
+            const nextImg = new Image();
+
+            nextImg.addEventListener('load', () => {resolve(nextImg)});
+
+            nextImg.src = img;
+            nextImg.id = `img-${idx}`;
+        })
+    };
+
     getPhotosUrl(query, page) {
         return `${this.BASE_URL}?method=${this.FLICKR_METHOD}&api_key=${this.FLICKR_KEY}&format=json&nojsoncallback=1&text=${query}&page=${page}`;
     };
 
     getPhotos(query, page) {
-        const cachedPhotos = this.getCachedPhotos(query);
-
         return new Promise(resolve => {
-            if (cachedPhotos && cachedPhotos.length > 0) {
-                resolve(cachedPhotos);
-            }
-            else {
-                fetch(this.getPhotosUrl(query, page))
-                    .then((response) => {
-                        response.json().then((data) => {
-                            const {photos : {photo}} = data;
+            fetch(this.getPhotosUrl(query, page))
+                .then(response => {
+                    response.json().then(data => {
+                        const {photos : {photo}} = data;
 
-                            window.localStorage.setItem(`photos-${query}`, JSON.stringify({
-                                photos: photo,
-                                query
-                            }));
-
-                            resolve(photo);
+                        this.urlToObjectUrl(photo).then(transformedPhotos => {
+                            resolve(transformedPhotos)
                         });
-                    })
-                    .catch((error) => {
-                        console.log('Something went wrong while fetching the data ', error);
                     });
-            }
+                })
+                .catch((error) => {
+                    console.log('Something went wrong while fetching the data ', error);
+                });
         });
     };
 
-    getCachedPhotos(query) {
-        const savedSearch = JSON.parse(window.localStorage.getItem(`photos-${query}`));
+    urlToObjectUrl(photos) {
+        let fetchedPhotos = [];
+        let count = 0;
 
-        if (savedSearch && savedSearch.query === query) {
-            return savedSearch.photos;
-        }
+        return new Promise(resolve => {
+            // Remove the photos with no farms since they'll result in a broken image
+            photos
+                .filter(p => p.farm !== 0)
+                .forEach(photo => {
+                    count++;
+
+                    fetch(`https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_n.jpg`)
+                        .then(response => {
+                            response.blob().then(data => {
+                                const objectURL = URL.createObjectURL(data);
+
+                                fetchedPhotos.push(objectURL);
+
+                                if (fetchedPhotos.length === count) {
+                                    resolve(fetchedPhotos);
+                                }
+                            })
+                        })
+                        .catch((error) => {
+                            console.log('Something went wrong while fetching the photo ', error);
+                        });
+                });
+        });
     };
 }

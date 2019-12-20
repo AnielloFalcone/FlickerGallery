@@ -29,6 +29,7 @@ const addListeners = () => {
 
                 resetGallery().then(() => {
                     startPhotoRender();
+                    searchInput.blur();
                 });
             }
         });
@@ -45,36 +46,21 @@ const addListeners = () => {
 const startPhotoRender = () => {
     photoService.getPhotos(query, page)
         .then(newPhotos => {
-            newPhotos.forEach(photo => photos.push(photo));
+            photos = newPhotos;
 
-            populateGallery(photos)
+            populateGallery()
                 .then(() => {
                     showGallery();
                 });
         });
 };
 
-const createImage = (img, idx) => {
-    return new Promise(resolve => {
-        const photoUrl = `https://farm${img.farm}.staticflickr.com/${img.server}/${img.id}_${img.secret}_n.jpg`;
-        const nextImg = new Image();
-
-        nextImg.addEventListener('load', () => {resolve(nextImg)});
-
-        nextImg.src = photoUrl;
-        nextImg.id = `img-${idx}`;
-    })
-};
-
-const populateGallery = (images) => {
+const populateGallery = () => {
     return new Promise((resolve) => {
         resolve(
-            // Remove the photos with no farms since they'll result in a broken image
-            images
-                .filter(p => p.farm !== 0)
-                .forEach((img, idx) => {
-                    createImage(img, idx).then(nextImg => {galleryContainer.appendChild(nextImg)});
-                })
+            photos.forEach((img, idx) => {
+                photoService.createImage(img, idx).then(nextImg => {galleryContainer.appendChild(nextImg)});
+            })
         );
     });
 };
