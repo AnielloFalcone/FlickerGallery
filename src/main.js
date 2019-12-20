@@ -1,16 +1,21 @@
-import './../scss/main.scss';
 import {PhotoService} from "./services/PhotosService";
+import './../scss/main.scss';
 
 const photoService = new PhotoService();
 
+// Variables
 let page = 1;
 let photos = [];
 let query = 'dogs';
 
+// Elements
 let galleryContainer;
 let loader;
 let searchInput;
 
+/**
+ * Attach listeners to the document (i.e. DOMContentLoaded)
+ */
 const addListeners = () => {
     document.addEventListener("DOMContentLoaded", () => {
         galleryContainer = document.querySelector('#container-gallery');
@@ -43,6 +48,9 @@ const addListeners = () => {
     });
 };
 
+/**
+ * Triggers the photo fetch and transformation and gallery population and display process
+ */
 const startPhotoRender = () => {
     photoService.getPhotos(query, page)
         .then(newPhotos => {
@@ -55,6 +63,10 @@ const startPhotoRender = () => {
         });
 };
 
+/**
+ * Appends every photo received to the galleryContainer
+ * @returns {Promise<unknown>}
+ */
 const populateGallery = () => {
     return new Promise((resolve) => {
         resolve(
@@ -65,6 +77,10 @@ const populateGallery = () => {
     });
 };
 
+/**
+ * Remove every photo from the gallery
+ * @returns {Promise<unknown>}
+ */
 const resetGallery = () => {
     return new Promise(resolve => {
         photos = [];
@@ -75,6 +91,9 @@ const resetGallery = () => {
     })
 };
 
+/**
+ * Shows the gallery and hides the loader
+ */
 const showGallery = () => {
     setTimeout(() => {
         galleryContainer.classList.remove('hidden');
@@ -82,6 +101,9 @@ const showGallery = () => {
     }, 300);
 };
 
+/**
+ * Shows the loader and hides the gallery
+ */
 const showLoader = () => {
     galleryContainer.classList.add('hidden');
     loader.classList.remove('removed');

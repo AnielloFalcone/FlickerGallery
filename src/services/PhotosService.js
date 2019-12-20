@@ -5,6 +5,12 @@ export class PhotoService {
         this.FLICKR_METHOD = 'flickr.photos.search';
     }
 
+    /**
+     * Creates a new Image and resolves the promise when the image is loaded
+     * @param img
+     * @param idx
+     * @returns {Promise<Image>}
+     */
     createImage(img, idx) {
         return new Promise(resolve => {
             const nextImg = new Image();
@@ -16,10 +22,22 @@ export class PhotoService {
         })
     };
 
+    /**
+     * Returns the URL to get photos by query
+     * @param query
+     * @param page
+     * @returns {string}
+     */
     getPhotosUrl(query, page) {
         return `${this.BASE_URL}?method=${this.FLICKR_METHOD}&api_key=${this.FLICKR_KEY}&format=json&nojsoncallback=1&text=${query}&page=${page}`;
     };
 
+    /**
+     * Get the photos from Flickr Api, then when received them back (transformed) resolves the promise.
+     * @param query
+     * @param page
+     * @returns {Promise<string[]>}
+     */
     getPhotos(query, page) {
         return new Promise(resolve => {
             fetch(this.getPhotosUrl(query, page))
@@ -38,6 +56,11 @@ export class PhotoService {
         });
     };
 
+    /**
+     * Transform the Flickr photo URL to an ObjectURl and sends them back only when all images are transformed
+     * @param photos
+     * @returns {Promise<string[]>}
+     */
     urlToObjectUrl(photos) {
         let fetchedPhotos = [];
         let count = 0;
