@@ -5,18 +5,19 @@ export class PhotoService {
         this.FLICKR_METHOD = 'flickr.photos.search';
     }
 
-    getPhotoUrl(query, page) {
+    getPhotosUrl(query, page) {
         return `${this.BASE_URL}?method=${this.FLICKR_METHOD}&api_key=${this.FLICKR_KEY}&format=json&nojsoncallback=1&text=${query}&page=${page}`;
     };
 
     getPhotos(query, page) {
         const cachedPhotos = this.getCachedPhotos(query);
+
         return new Promise(resolve => {
             if (cachedPhotos && cachedPhotos.length > 0) {
                 resolve(cachedPhotos);
             }
             else {
-                fetch(this.getPhotoUrl(query, page))
+                fetch(this.getPhotosUrl(query, page))
                     .then((response) => {
                         response.json().then((data) => {
                             const {photos : {photo}} = data;
@@ -38,6 +39,7 @@ export class PhotoService {
 
     getCachedPhotos(query) {
         const savedSearch = JSON.parse(window.localStorage.getItem(`photos-${query}`));
+
         if (savedSearch && savedSearch.query === query) {
             return savedSearch.photos;
         }
