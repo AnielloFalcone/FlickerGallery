@@ -1,6 +1,6 @@
 {
   "name": "flickr-gallery",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A vanillaJS Flickr gallery app",
   "private": false,
   "main": "main.js",
