@@ -1,0 +1,94 @@
+body {
+  margin: 0;
+  $total-search-height: 84px;
+  $gallery-height: calc(100vh - #{$total-search-height});
+
+  #search-bar {
+    height: 48px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 24px 0 24px 12px;
+    position: relative;
+
+    @media (max-width: 600px) {
+      width: 100%;
+      margin: 8px;
+    }
+
+    form {
+      width: 50%;
+
+      input {
+        width: 90%;
+        border-radius: 25px;
+        border: 1px solid darkgrey;
+        outline: none;
+        padding: 4px 12px;
+        height: 30px;
+        font-size: 14px;
+      }
+    }
+  }
+
+  #container-page {
+    display: flex;
+    flex-direction: row;
+    min-height: $gallery-height;
+
+    #container {
+      &-gallery {
+        display: flex;
+        flex-flow: row wrap;
+        margin-left: 8px;
+        height: $gallery-height;
+        width: 100%;
+        overflow: scroll;
+
+        @media (max-width: 600px) {
+          margin-left: 0;
+        }
+
+        img {
+          flex: auto;
+          height: 240px;
+          min-width: 180px;
+          margin: 0 8px 8px 0;
+          border-radius: 10px;
+
+          @media (max-width: 600px) {
+            margin: 4px 8px;
+          }
+        }
+      }
+    }
+
+    .hidden {
+      visibility: hidden;
+      width: 0 !important;
+      height: 0;
+    }
+
+    .removed {
+      display: none;
+    }
+
+    #loader {
+      position: absolute;
+      left: 45%;
+      top: 45%;
+      border: 8px solid #F1F1FF;
+      border-top: 8px solid limegreen;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  }
+
+}

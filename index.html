@@ -1,12 +1,29 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Flickr Gallery</title>
 </head>
 
 <body>
+    <div id="search-bar">
+        <form>
+            <input id="search"
+                   name="search"
+                   type="text"
+                   aria-label="search"
+                   placeholder="Search photos (ctrl/cmd f)"
+                   minlength="3"
+            />
+        </form>
+    </div>
 
+    <div id="container-page">
+        <div id="container-gallery" class="hidden"></div>
+
+        <div id="loader"></div>
+    </div>
 </body>
 
 </html>
